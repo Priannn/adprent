@@ -15,7 +15,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('admin')->name('dashboard');
 
 Route::resource('mobil', MobilController::class);
-Route::resource('pelanggan', PelangganController::class);
+Route::resource('pelanggan', PelangganController::class);   
 Route::resource('penyewaan', PenyewaanController::class);
 Route::patch('penyewaan/{penyewaan}/selesai',[PenyewaanController::class, 'selesai'])->name('penyewaan.selesai');
 
