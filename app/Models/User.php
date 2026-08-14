@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use App\Models\Pelanggan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,7 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,5 +48,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function pelanggan(){
+        return $this->belongsTo(Pelanggan::class);
     }
 }

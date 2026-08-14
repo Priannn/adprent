@@ -9,6 +9,7 @@ class Pelanggan extends Model
 {
     use HasFactory;
     protected $fillable =[
+        'user_id',
         'nama_pelanggan',
         'nik',    
         'nomor_hp',    
@@ -16,5 +17,8 @@ class Pelanggan extends Model
     ];
     public function penyewaans(){
         return $this->hasMany(Penyewaan::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }
