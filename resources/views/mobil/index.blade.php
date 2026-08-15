@@ -13,9 +13,10 @@
             <th class="border border-slate-300 px-4 py-2">No</th>
             <th class="border border-slate-300 px-4 py-2">Nama Mobil</th>
             <th class="border border-slate-300 px-4 py-2">Merk Mobil</th>
-            <th class="border border-slate-300 px-4 py-2">Plat Nomor</th>
-            <th class="border border-slate-300 px-4 py-2">Tahun Mobil</th>
+            <th class="border border-slate-300 px-4 py-2">Gambar</th>
+            <th class="border border-slate-300 px-4 py-2">Transmisi</th>
             <th class="border border-slate-300 px-4 py-2">Harga Sewa</th>
+            <th class="border border-slate-300 px-4 py-2">Jumlah Seat</th>
             <th class="border border-slate-300 px-4 py-2">Status</th>
             <th class="border border-slate-300 px-4 py-2">Aksi</th>
         </tr>
@@ -26,9 +27,16 @@
             <td class="border border-slate-300 px-4 py-2">{{ $index + 1 }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $item->nama_mobil }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $item->merk }}</td>
-            <td class="border border-slate-300 px-4 py-2">{{ $item->plat_nomor }}</td>
-            <td class="border border-slate-300 px-4 py-2">{{ $item->tahun_mobil }}</td>
+           <td class="border border-slate-300 px-4 py-2">
+                <img
+                    src="{{ asset('storage/' . $item->gambar) }}"
+                    alt="{{ $item->nama_mobil }}"
+                    class="w-24 h-16 object-cover rounded-lg"
+                >
+            </td>
+            <td class="border border-slate-300 px-4 py-2">{{ $item->transmisi }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $item->harga_sewa }}</td>
+            <td class="border border-slate-300 px-4 py-2">{{ $item->jumlah_seat }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $item->status }}</td>
             <td class="border border-slate-300 px-4 py-2">
                 <div class="flex gap-3">

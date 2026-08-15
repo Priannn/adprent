@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="p-5">
-    <form action="{{ route('mobil.update', $mobil->id) }}" method="POST">
+    <form action="{{ route('mobil.update', $mobil->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <main class="p-2 bg-slate-50">
@@ -29,19 +29,39 @@
                         </p>
                     @enderror
                 </div>
-                <div class="flex flex-col">
-                    <label for="plat_nomor" class="text-sm text-slate-700">Plat Nomor</label>
-                    <input class="p-2 rounded-lg border border-blue-950 mt-2" id="plat_nomor" name="plat_nomor" type="text" placeholder="masukan plat nomor mobil" value="{{ old('plat_nomor', $mobil->plat_nomor) }}">
-                    @error('plat_nomor')
+               <div class="flex flex-col">
+                    <label for="gambar" class="text-sm text-slate-700">
+                        Gambar
+                    </label>
+
+                    @if ($mobil->gambar)
+                        <img
+                            src="{{ asset('storage/' . $mobil->gambar) }}"
+                            alt="{{ $mobil->nama_mobil }}"
+                            class="w-32 h-20 object-cover rounded-lg mt-2 mb-2"
+                        >
+                    @endif
+
+                    <input
+                        class="p-2 rounded-lg border border-blue-950"
+                        id="gambar"
+                        name="gambar"
+                        type="file"
+                    >
+
+                    @error('gambar')
                         <p class="text-red-500 text-sm mt-1">
                             {{ $message }}
                         </p>
                     @enderror
                 </div>
-                <div class="flex flex-col">
-                    <label for="tahun_mobil" class="text-sm text-slate-700">Tahun Mobil</label>
-                    <input class="p-2 rounded-lg border border-blue-950 mt-2" id="tahun_mobil" name="tahun_mobil" type="number" placeholder="masukan tahun mobil" value="{{ old('tahun_mobil', $mobil->tahun_mobil) }}">
-                    @error('tahun_mobil')
+               <div class="flex flex-col">
+                    <label for="transmisi" class="text-sm text-slate-700">Transmisi</label>
+                  <select name="transmisi" class="p-2 rounded-lg border border-blue-950 mt-2">
+                    <option value="matic" {{ $mobil->transmisi == 'matic' ? 'selected' : '' }}>Matic</option>
+                    <option value="manual" {{ $mobil->transmisi == 'manual' ? 'selected' : '' }}>Manual</option>
+                  </select>
+                    @error('transmisi')
                         <p class="text-red-500 text-sm mt-1">
                             {{ $message }}
                         </p>
@@ -51,6 +71,15 @@
                     <label for="harga_sewa" class="text-sm text-slate-700">Harga Sewa</label>
                     <input class="p-2 rounded-lg border border-blue-950 mt-2" id="harga_sewa" name="harga_sewa" type="number" placeholder="masukan harga sewa mobil" value="{{ old('harga_sewa', $mobil->harga_sewa) }}">
                     @error('harga_sewa')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+                <div class="flex flex-col">
+                    <label for="jumlah_seat" class="text-sm text-slate-700">Jumlah Seat</label>
+                    <input class="p-2 rounded-lg border border-blue-950 mt-2" id="jumlah_seat" name="jumlah_seat" type="number" placeholder="masukan harga sewa mobil" value="{{ old('jumlah_seat', $mobil->jumlah_seat) }}">
+                    @error('jumlah_seat')
                         <p class="text-red-500 text-sm mt-1">
                             {{ $message }}
                         </p>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Mobil extends Model
 {
     use HasFactory;
-    protected $fillable = ['nama_mobil', 'merk', 'plat_nomor', 'tahun_mobil', 'harga_sewa', 'status'];
+    protected $fillable = ['nama_mobil', 'merk', 'gambar', 'transmisi', 'jumlah_seat', 'harga_sewa', 'status'];
 
     public function penyewaans(){
         return $this->hasMany(Penyewaan::class);
