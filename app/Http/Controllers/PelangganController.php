@@ -18,30 +18,30 @@ class PelangganController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        return view('pelanggan.create');
-    }
+    // public function create()
+    // {
+    //     return view('pelanggan.create');
+    // }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_pelanggan'=>'required',
-            'nik'=>'required|unique:pelanggans,nik|numeric',
-            'nomor_hp'=>'required|numeric',
-            'alamat'=>'required'
-        ]);
-        Pelanggan::create([
-            'nama_pelanggan'=>$request->nama_pelanggan,
-            'nik'=>$request->nik,
-            'nomor_hp'=>$request->nomor_hp,
-            'alamat'=>$request->alamat,
-        ]);
-        return redirect()->route('pelanggan.index');
-    }
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'nama_pelanggan'=>'required',
+    //         'nik'=>'required|unique:pelanggans,nik|numeric',
+    //         'nomor_hp'=>'required|numeric',
+    //         'alamat'=>'required'
+    //     ]);
+    //     Pelanggan::create([
+    //         'nama_pelanggan'=>$request->nama_pelanggan,
+    //         'nik'=>$request->nik,
+    //         'nomor_hp'=>$request->nomor_hp,
+    //         'alamat'=>$request->alamat,
+    //     ]);
+    //     return redirect()->route('pelanggan.index');
+    // }
 
     /**
      * Display the specified resource.

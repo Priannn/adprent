@@ -10,28 +10,26 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/', function () {
-    
-    if (!Auth::check()) {
-        return redirect()->route('login');
-    }
-    if (Auth::user()->role === 'admin') {
-        return redirect()->route('dashboard');
-    }
-    return redirect()->route('landing');
-
-})->name('home');
+Route::get('/', [LandingController::class, 'index'])->name('landing'); 
 
 
-Route::get('/landing', [LandingController::class, 'index'])->name('landing');
+Route::middleware('admin')->group(function () {
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('admin')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
-Route::resource('mobil', MobilController::class);
-Route::resource('pelanggan', PelangganController::class);   
-Route::resource('penyewaan', PenyewaanController::class);
-Route::patch('penyewaan/{penyewaan}/selesai',[PenyewaanController::class, 'selesai'])->name('penyewaan.selesai');
+    Route::resource('mobil', MobilController::class);
 
+    Route::resource('pelanggan', PelangganController::class);
+
+    Route::resource('penyewaan', PenyewaanController::class);
+
+    Route::patch(
+        'penyewaan/{penyewaan}/selesai',
+        [PenyewaanController::class, 'selesai']
+    )->name('penyewaan.selesai');
+
+});
 
 Route::get('/register', [AuthController::class, 'showRegister'])->middleware('guest')->name('register');
 Route::post('/register', [AuthController::class, 'register']);

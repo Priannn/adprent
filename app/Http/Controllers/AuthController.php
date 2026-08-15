@@ -39,8 +39,9 @@ class AuthController extends Controller
             'nomor_hp' => $request->nomor_hp,
             'alamat' => $request->alamat,
         ]);
-
-        return redirect('/login');
+        Auth::login($user);
+        $request->session()->regenerate();
+        return redirect('landing');
     }
         public function showLogin(){
             return view('auth.login');
@@ -57,7 +58,7 @@ class AuthController extends Controller
                 if(Auth::user()->role === 'admin'){
                     return redirect()->route('dashboard');
                 }
-                return redirect('/');
+                return redirect()->route('landing');
             }
 
             return back()->withErrors([

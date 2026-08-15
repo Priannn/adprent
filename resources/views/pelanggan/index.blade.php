@@ -9,11 +9,11 @@
             Data Pelanggan
         </h1>
 
-        <a
+        {{-- <a
             href="{{ route('pelanggan.create') }}"
             class="bg-[#162456] text-sm text-white py-2 px-4 rounded-lg font-semibold">
             Tambah Pelanggan
-        </a>
+        </a> --}}
     </div>
 
     <table class="w-full border-collapse border border-slate-300 datatable">
