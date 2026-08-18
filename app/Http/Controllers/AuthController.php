@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -28,7 +29,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->nama_pelanggan,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
             'role' => 'user',
         ]);
 
@@ -41,7 +42,7 @@ class AuthController extends Controller
         ]);
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect('landing');
+        return redirect()->route('landing');
     }
         public function showLogin(){
             return view('auth.login');

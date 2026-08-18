@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MobilController;
@@ -38,3 +39,11 @@ Route::get('/login', [AuthController::class, 'showLogin'])->middleware('guest')-
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/booking/{mobil}', [BookingController::class, 'create'])
+    ->middleware('auth')
+    ->name('booking.create');
+
+Route::post('/booking', [BookingController::class, 'store'])
+    ->middleware('auth')
+    ->name('booking.store');

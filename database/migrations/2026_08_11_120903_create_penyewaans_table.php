@@ -18,7 +18,13 @@ return new class extends Migration
             $table->date('tanggal_sewa');
             $table->date('tanggal_kembali');
             $table->integer('total_harga');
-            $table->enum('status', ['disewa', 'selesai']);
+           $table->enum('status', [
+                'menunggu',
+                'dikonfirmasi',
+                'disewa',
+                'selesai',
+                'dibatalkan'
+            ])->default('menunggu');
             $table->timestamps();
         });
     }
