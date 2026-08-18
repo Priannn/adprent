@@ -9,6 +9,7 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PenyewaanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ProfileController;
 
 
 Route::get('/', [LandingController::class, 'index'])->name('landing'); 
@@ -47,3 +48,13 @@ Route::get('/booking/{mobil}', [BookingController::class, 'create'])
 Route::post('/booking', [BookingController::class, 'store'])
     ->middleware('auth')
     ->name('booking.store');
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile');
+
+    Route::get('/riwayat-pemesanan', [ProfileController::class, 'history'])
+        ->name('booking.history');
+
+});

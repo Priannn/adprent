@@ -11,34 +11,265 @@
 </head>
 <body class="bg-[#FBFBFB]">
   
-    <section class="max-w-5xl mx-auto p-6 relative">
-        <div class="flex justify-between items-center">
+   <section class="max-w-5xl mx-auto p-6 relative">
+    <div class="flex justify-between items-center">
+
+        {{-- LOGO --}}
+        <a href="{{ route('landing') }}">
             <img src="{{ asset('images/logo/logo.svg') }}" alt="Logo">
-            <div class="hidden md:flex space-x-8">
-                <a href="#" class="cursor-pointer">Home</a>
-                <a href="#" class="cursor-pointer">Tentang Kami</a>
-                <a href="#" class="cursor-pointer">Katalog</a>
-                <a href="#" class="cursor-pointer">Testimoni</a>
-            </div>
-            <div class="hidden md:block bg-[#003049] rounded-full py-2 px-6 text-white font-bold">
-                <button><a>Login</a></button>
-            </div>
-            <button id="hamburger-btn" class="block md:hidden text-[#003049] focus:outline-none">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
+        </a>
+
+
+        {{-- NAVBAR DESKTOP --}}
+        <div class="hidden md:flex space-x-8">
+            <a href="{{ route('landing') }}" class="cursor-pointer">Home</a>
+            <a href="#tentang" class="cursor-pointer">Tentang Kami</a>
+            <a href="#katalog" class="cursor-pointer">Katalog</a>
+            <a href="#testimoni" class="cursor-pointer">Testimoni</a>
         </div>
-        <div id="mobile-menu" class="hidden absolute top-20 left-6 right-6 bg-white shadow-xl rounded-xl p-6 flex-col space-y-4 z-50 md:hidden border border-slate-100">
-            <a href="#" class="text-[#003049] font-medium border-b border-slate-100 pb-2">Home</a>
-            <a href="#" class="text-[#003049] font-medium border-b border-slate-100 pb-2">Tentang Kami</a>
-            <a href="#" class="text-[#003049] font-medium border-b border-slate-100 pb-2">Katalog</a>
-            <a href="#" class="text-[#003049] font-medium border-b border-slate-100 pb-2">Testimoni</a>
-            <div class="bg-[#003049] rounded-full py-3 px-6 text-white font-bold text-center mt-2">
-                <button class="w-full"><a>Login</a></button>
-            </div>
+
+
+        {{-- RIGHT DESKTOP --}}
+        <div class="hidden md:block relative">
+
+            @auth
+
+                {{-- ADMIN --}}
+                @if(Auth::user()->role === 'admin')
+
+                    <a
+                        href="{{ route('dashboard') }}"
+                        class="bg-[#003049] rounded-full py-2 px-6 text-white font-bold"
+                    >
+                        Dashboard
+                    </a>
+
+                {{-- USER --}}
+                @else
+
+                    <button
+                        id="profileButton"
+                        type="button"
+                        class="flex items-center gap-2 bg-[#003049] rounded-full py-2 px-5 text-white font-bold"
+                    >
+
+                        {{-- Avatar huruf pertama --}}
+                        <div class="w-7 h-7 rounded-full bg-white text-[#003049] flex items-center justify-center text-sm">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </div>
+
+                        <span>
+                            {{ Auth::user()->name }}
+                        </span>
+
+                        <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m19 9-7 7-7-7"
+                            />
+                        </svg>
+
+                    </button>
+
+
+                    {{-- DROPDOWN --}}
+                    <div
+                        id="profileDropdown"
+                        class="hidden absolute right-0 top-12 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-50"
+                    >
+
+                        {{-- USER INFO --}}
+                        <div class="px-5 py-4 border-b border-slate-100">
+
+                            <p class="font-bold text-[#003049]">
+                                {{ Auth::user()->name }}
+                            </p>
+
+                            <p class="text-sm text-gray-500 truncate">
+                                {{ Auth::user()->email }}
+                            </p>
+
+                        </div>
+
+
+                        {{-- MENU --}}
+                        <div class="py-2">
+
+                            <a
+                                href="{{ route('profile') }}"
+                                class="block px-5 py-3 text-sm text-gray-700 hover:bg-slate-50"
+                            >
+                                Profil Saya
+                            </a>
+
+                            <a
+                                href="{{ route('booking.history') }}"
+                                class="block px-5 py-3 text-sm text-gray-700 hover:bg-slate-50"
+                            >
+                                Riwayat Pemesanan
+                            </a>
+
+                        </div>
+
+
+                        {{-- LOGOUT --}}
+                        <div class="border-t border-slate-100 py-2">
+
+                            <form
+                                action="{{ route('logout') }}"
+                                method="POST"
+                            >
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="w-full text-left px-5 py-3 text-sm text-red-500 hover:bg-red-50"
+                                >
+                                    Logout
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                @endif
+
+            @else
+
+                {{-- BELUM LOGIN --}}
+                <a
+                    href="{{ route('login') }}"
+                    class="inline-block bg-[#003049] rounded-full py-2 px-6 text-white font-bold"
+                >
+                    Login
+                </a>
+
+            @endauth
+
         </div>
-    </section>
+
+
+        {{-- HAMBURGER --}}
+        <button
+            id="hamburger-btn"
+            class="block md:hidden text-[#003049] focus:outline-none"
+        >
+            <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                />
+            </svg>
+        </button>
+
+    </div>
+
+
+    {{-- MOBILE MENU --}}
+    <div
+        id="mobile-menu"
+        class="hidden absolute top-20 left-6 right-6 bg-white shadow-xl rounded-xl p-6 flex-col space-y-4 z-50 md:hidden border border-slate-100"
+    >
+
+        <a
+            href="{{ route('landing') }}"
+            class="text-[#003049] font-medium border-b border-slate-100 pb-2"
+        >
+            Home
+        </a>
+
+        <a
+            href="#tentang"
+            class="text-[#003049] font-medium border-b border-slate-100 pb-2"
+        >
+            Tentang Kami
+        </a>
+
+        <a
+            href="#katalog"
+            class="text-[#003049] font-medium border-b border-slate-100 pb-2"
+        >
+            Katalog
+        </a>
+
+        <a
+            href="#testimoni"
+            class="text-[#003049] font-medium border-b border-slate-100 pb-2"
+        >
+            Testimoni
+        </a>
+        @auth
+            @if(Auth::user()->role === 'admin')
+
+                <a
+                    href="{{ route('dashboard') }}"
+                    class="bg-[#003049] rounded-full py-3 px-6 text-white font-bold text-center"
+                >
+                    Dashboard
+                </a>
+            @else
+
+                <a
+                    href="{{ route('profile') }}"
+                    class="text-[#003049] font-medium border-b border-slate-100 pb-2"
+                >
+                    Profil Saya
+                </a>
+
+                <a
+                    href="{{ route('booking.history') }}"
+                    class="text-[#003049] font-medium border-b border-slate-100 pb-2"
+                >
+                    Riwayat Pemesanan
+                </a>
+
+                <form
+                    action="{{ route('logout') }}"
+                    method="POST"
+                >
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="w-full bg-red-500 rounded-full py-3 px-6 text-white font-bold text-center"
+                    >
+                        Logout
+                    </button>
+
+                </form>
+
+            @endif
+
+        @else
+
+            <a
+                href="{{ route('login') }}"
+                class="block bg-[#003049] rounded-full py-3 px-6 text-white font-bold text-center"
+            >
+                Login
+            </a>
+
+        @endauth
+
+    </div>
+
+</section>
     <section class="overflow-hidden">
         <div class="text-center mt-10 md:mt-16">
             <h1 class="text-3xl md:text-4xl font-bold text-[#003049]" data-aos="fade-down">
@@ -132,7 +363,7 @@
                 <div class="space-y-3 p-4 shadow-xl rounded-xl">
                     <img src="{{ asset('storage/' .$item->gambar) }}" class="w-full">
                     <h1 class="font-bold">{{ $item->merk }} {{ $item->nama_mobil }}</h1>
-                    <h1 class="text-[#D62828] font-semibold text-xl">IDR {{ $item->harga_sewa }}<span class="text-[10px] text-slate-500">/hari</span></h1>
+                    <h1 class="text-[#D62828] font-semibold text-xl">IDR {{ number_format($item->harga_sewa, 0, ',', '.') }}<span class="text-[10px] text-slate-500">/hari</span></h1>
                     <div class="flex items-center space-x-2">
                         <div class="flex">
                             <img src="{{ asset('images/icon/bahanbakar.svg') }}" alt="" class="w-3">
@@ -149,7 +380,7 @@
                     </div>
                     <div class="flex gap-3 mt-4">
                         <button class="bg-[#003049] text-[9px] text-white py-2 px-3 rounded-full font-semibold flex-1"><a href="{{ route('booking.create', $item->id) }}">Book Sekarang</a></button>
-                        <button class="text-[10px] border border-[#003049] text-[#003049] py-2 px-3 rounded-full font-semibold flex-1">Chat Admin</button>
+                        <button class="text-[10px] border border-[#003049] text-[#003049] py-2 px-3 rounded-full font-semibold flex-1"><a href="https://wa.me/62895800183963">Chat Admin</a></button>
                     </div>
                 </div>
             </div>
@@ -293,44 +524,60 @@
     <script>
      AOS.init();
     </script>
-    <script>
-       
-        document.addEventListener('DOMContentLoaded', function () {
-            const btn = document.getElementById('hamburger-btn');
-            const menu = document.getElementById('mobile-menu');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+ 
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
-                menu.classList.toggle('flex');
+        if (hamburgerBtn && mobileMenu) {
+            hamburgerBtn.addEventListener('click', function () {
+                mobileMenu.classList.toggle('hidden');
+                mobileMenu.classList.toggle('flex');
             });
-        });
+        }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var swiper = new Swiper('.mySwiper', {
-                effect: 'coverflow',
-                grabCursor: true,
-                centeredSlides: true,
-                slidesPerView: 'auto', 
-                loop: true,
-                loopSlides: 6,
-                coverflowEffect: {
-                    rotate: 30,    
-                    stretch: -15,  
-                    depth: 300,    
-                    modifier: 1,
-                    scale: 0.9,
-                    slideShadows: false, 
-                },
-                autoplay: {
-                    delay: 1500,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        if (profileButton && profileDropdown) {
+            profileButton.addEventListener('click', function (event) {
+                event.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
             });
+
+            document.addEventListener('click', function (event) {
+                if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        var swiper = new Swiper('.mySwiper', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto', 
+            loop: true,
+            loopSlides: 6,
+            coverflowEffect: {
+                rotate: 30,    
+                stretch: -15,  
+                depth: 300,    
+                modifier: 1,
+                scale: 0.9,
+                slideShadows: false, 
+            },
+            autoplay: {
+                delay: 1500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
         });
-    </script>
+    });
+</script>
 </body>
 </html>
