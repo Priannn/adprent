@@ -4,159 +4,222 @@
 
 <div class="p-5">
 
-    <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-semibold">
-            Data Penyewaan
-        </h1>
+    <div class="flex justify-between items-center mb-6">
 
-        <a
-            href="{{ route('penyewaan.create') }}"
-            class="bg-[#162456] text-sm text-white py-2 px-4 rounded-lg font-semibold">
-            Tambah Penyewaan
-        </a>
+        <div>
+            <h1 class="text-2xl font-bold text-[#162456]">
+                Data Penyewaan
+            </h1>
+
+            <p class="text-gray-500 mt-1">
+                Kelola pemesanan mobil dari pelanggan.
+            </p>
+        </div>
+
     </div>
 
-    <table class="w-full border-collapse border border-slate-300 datatable">
 
-        <thead>
-            <tr>
-                <th class="border border-slate-300 px-4 py-2">No</th>
-                <th class="border border-slate-300 px-4 py-2">Pelanggan</th>
-                <th class="border border-slate-300 px-4 py-2">Mobil</th>
-                <th class="border border-slate-300 px-4 py-2">Tanggal Sewa</th>
-                <th class="border border-slate-300 px-4 py-2">Tanggal Kembali</th>
-                <th class="border border-slate-300 px-4 py-2">Total Harga</th>
-                <th class="border border-slate-300 px-4 py-2">Status</th>
-                <th class="border border-slate-300 px-4 py-2">Aksi</th>
-            </tr>
-        </thead>
+    @if(session('success'))
 
-        <tbody>
+        <div class="mb-5 bg-green-100 text-green-700 px-4 py-3 rounded-lg">
+            {{ session('success') }}
+        </div>
 
-        @foreach ($penyewaan as $index => $item)
-              <tr>
-                    <td class="border border-slate-300 px-4 py-2">
-                        {{ $index+1 }}
-                    </td>
-                    <td class="border border-slate-300 px-4 py-2">
-                        {{ $item->pelanggan->nama_pelanggan }}
-                    </td>
+    @endif
 
-                    <td class="border border-slate-300 px-4 py-2">
-                       {{ $item->mobil->nama_mobil }}
-                    </td>
 
-                    <td class="border border-slate-300 px-4 py-2">
-                        {{ $item->tanggal_sewa }}
-                    </td>
+    <div class="overflow-x-auto">
 
-                    <td class="border border-slate-300 px-4 py-2">
-                       {{ $item->tanggal_kembali }}
-                    </td>
-                    <td class="border border-slate-300 px-4 py-2">
-                       {{ $item->total_harga }}
-                    </td>
-                    <td class="border border-slate-300 px-4 py-2">
-                       @if($item->status == 'disewa')
-                       <span class="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
-                            Disewa
-                        </span>
-                       @else
-                       <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-                            Selesai
-                        </span>
-                       @endif
-                    </td>
+        <table class="w-full border-collapse border border-slate-300">
 
-                    <td class="border border-slate-300 px-4 py-2">
-                      @if ($item->status === 'disewa' && $item->tanggal_kembali <= now()->toDateString())
-                            <form action="{{ route('penyewaan.selesai', $item->id) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
+            <thead>
 
-                                <button type="submit" class="text-green-500">
-                                    Kembalikan
-                                </button>
-                            </form>
-                        @endif
-                    </td>
+                <tr class="bg-slate-100">
+
+                    <th class="border px-4 py-3">
+                        No
+                    </th>
+
+                    <th class="border px-4 py-3">
+                        Pelanggan
+                    </th>
+
+                    <th class="border px-4 py-3">
+                        Mobil
+                    </th>
+
+                    <th class="border px-4 py-3">
+                        Tanggal Sewa
+                    </th>
+
+                    <th class="border px-4 py-3">
+                        Tanggal Kembali
+                    </th>
+
+                    <th class="border px-4 py-3">
+                        Total
+                    </th>
+
+                    <th class="border px-4 py-3">
+                        Status
+                    </th>
+
+                    <th class="border px-4 py-3">
+                        Aksi
+                    </th>
+
                 </tr>
-        @endforeach
 
-              
+            </thead>
 
 
-            <div
-                id="deleteModal"
-                class="hidden fixed inset-0 z-50 items-center justify-center bg-black/50">
+            <tbody>
 
-                <div class="bg-white rounded-xl p-6 w-full max-w-md">
+                @forelse($penyewaan as $index => $item)
 
-                    <h2 class="text-xl font-bold text-slate-800">
-                        Hapus Data Pelanggan?
-                    </h2>
+                    <tr>
 
-                    <p class="text-slate-600 mt-2">
-                        Apakah kamu yakin ingin menghapus data pelanggan
-                        <span class="font-bold" id="deleteNama">
-                        
-                        </span>?
-                    </p>
+                        <td class="border px-4 py-3 text-center">
+                            {{ $index + 1 }}
+                        </td>
 
-                    <div class="flex justify-end gap-3 mt-6">
+                        <td class="border px-4 py-3">
+                            {{ $item->pelanggan->nama_pelanggan }}
+                        </td>
 
-                        <button
-                            type="button"
-                            onclick="closeDeleteModal()"
-                            class="px-4 py-2 rounded-lg bg-slate-200">
-                            Batal
-                        </button>
+                        <td class="border px-4 py-3">
+                            {{ $item->mobil->nama_mobil }}
+                        </td>
 
-                        <form
-                            id="deleteForm"
-                            method="POST">
+                        <td class="border px-4 py-3">
+                            {{ $item->tanggal_sewa }}
+                        </td>
 
-                            {{-- @csrf
-                            @method('DELETE') --}}
+                        <td class="border px-4 py-3">
+                            {{ $item->tanggal_kembali }}
+                        </td>
 
-                            <button
-                                type="submit"
-                                class="px-4 py-2 rounded-lg bg-red-500 text-white">
-                                Hapus
-                            </button>
+                        <td class="border px-4 py-3">
+                            Rp {{ number_format($item->total_harga, 0, ',', '.') }}
+                        </td>
 
-                        </form>
 
-                    </div>
+                        {{-- STATUS --}}
 
-                </div>
+                        <td class="border px-4 py-3 text-center">
 
-            </div>
+                            @if($item->status === 'menunggu')
 
-        </tbody>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                                    Menunggu
+                                </span>
 
-    </table>
+                            @elseif($item->status === 'dikonfirmasi')
 
-    <script>
-        function openDeleteModal(id, nama) {
-            const modal = document.getElementById('deleteModal');
-            const form = document.getElementById('deleteForm');
-            const deleteNama = document.getElementById('deleteNama');
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                    Dikonfirmasi
+                                </span>
 
-            form.action = `/pelanggan/${id}`;
-            deleteNama.textContent = nama;
+                            @elseif($item->status === 'disewa')
 
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                    Disewa
+                                </span>
 
-        function closeDeleteModal() {
-            const modal = document.getElementById('deleteModal');
+                            @elseif($item->status === 'selesai')
 
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-    </script>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+                                    Selesai
+                                </span>
+
+                            @elseif($item->status === 'dibatalkan')
+
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                                    Dibatalkan
+                                </span>
+
+                            @endif
+
+                        </td>
+
+
+                        {{-- AKSI --}}
+
+                        <td class="border px-4 py-3">
+
+                            @if($item->status === 'menunggu')
+
+                                <div class="flex gap-2">
+
+                                    <form
+                                        action="{{ route('penyewaan.konfirmasi', $item->id) }}"
+                                        method="POST"
+                                    >
+
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <button
+                                            type="submit"
+                                            class="bg-green-500 text-white px-3 py-2 rounded-lg text-sm"
+                                        >
+                                            Konfirmasi
+                                        </button>
+
+                                    </form>
+
+
+                                    <form
+                                        action="{{ route('penyewaan.batalkan', $item->id) }}"
+                                        method="POST"
+                                    >
+
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <button
+                                            type="submit"
+                                            class="bg-red-500 text-white px-3 py-2 rounded-lg text-sm"
+                                        >
+                                            Batalkan
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            @else
+
+                                <span class="text-gray-400 text-sm">
+                                    Tidak ada aksi
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="border px-4 py-10 text-center text-gray-500"
+                        >
+                            Belum ada pemesanan.
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 

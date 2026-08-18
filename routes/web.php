@@ -30,6 +30,16 @@ Route::middleware('admin')->group(function () {
         'penyewaan/{penyewaan}/selesai',
         [PenyewaanController::class, 'selesai']
     )->name('penyewaan.selesai');
+    
+    Route::patch(
+    'penyewaan/{penyewaan}/konfirmasi',
+    [PenyewaanController::class, 'konfirmasi']
+    )->name('penyewaan.konfirmasi');
+
+    Route::patch(
+        'penyewaan/{penyewaan}/batalkan',
+        [PenyewaanController::class, 'batalkan']
+    )->name('penyewaan.batalkan');
 
 });
 

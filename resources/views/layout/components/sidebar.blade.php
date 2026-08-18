@@ -1,4 +1,4 @@
-<aside class="min-h-screen bg-slate-900 p-5 text-white">
+<aside class="sticky top-0 h-screen w-64 bg-slate-900 p-5 text-white">
     <h1 class="mb-8 text-xl font-bold">
         AdpRental.
     </h1>
@@ -7,7 +7,7 @@
         <ul class="space-y-2">
             <li>
                  
-                <a href="{{ url('/') }}"
+                <a href="{{ url('/dashboard') }}"
                    class="flex items-center gap-2 rounded-lg px-4 py-3 hover:bg-slate-800">
                    <i data-lucide="layout-dashboard"></i>
                     Dashboard

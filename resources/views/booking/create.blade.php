@@ -113,6 +113,15 @@
                 method="POST"
                 class="mt-6"
             >
+            @if($errors->any())
+    <div class="bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5">
+        <ul class="list-disc list-inside">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
                 @csrf
 

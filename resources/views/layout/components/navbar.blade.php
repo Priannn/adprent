@@ -4,6 +4,6 @@
    </div>
    <div class="flex items-center">
         <img src="https://placehold.co/40x40/1d293d/fff" alt="" class="rounded-full ">
-        <h1 class="ml-2">Admin - Adprianpratama</h1>
+        <h1 class="ml-2">{{ auth()->user()->name }}</h1>
    </div>
 </div>

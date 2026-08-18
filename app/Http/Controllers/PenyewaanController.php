@@ -14,7 +14,7 @@ class PenyewaanController extends Controller
      */
     public function index()
     {
-        $penyewaan = Penyewaan::with(['pelanggan','mobil'])->get();
+        $penyewaan = Penyewaan::with(['pelanggan','mobil'])->latest()->get();
         return view('penyewaan.index',compact('penyewaan'));
     }
 
@@ -38,8 +38,25 @@ class PenyewaanController extends Controller
             'mobil_id'=>'required',
             'tanggal_sewa'=>'required|date',
             'tanggal_kembali'=>'required|date|after:tanggal_sewa',
-            // 'status'=>'required|in:disewa,selesai',
+            'total_harga' => 'required|numeric|min:0',
         ]);
+        $bentrok = Penyewaan::where('mobil_id', $request->mobil_id)
+        ->whereIn('status', ['menunggu', 'dikonfirmasi', 'disewa'])
+        ->where(function ($query) use ($request) {
+
+            $query->where('tanggal_sewa', '<=', $request->tanggal_kembali)
+                  ->where('tanggal_kembali', '>=', $request->tanggal_sewa);
+
+        })
+        ->exists();
+
+        if ($bentrok) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'tanggal_sewa' => 'Mobil tidak tersedia pada tanggal yang kamu pilih.'
+                ]);
+        }
         $mobil = Mobil::findorFail($request->mobil_id);
         $tanggal_sewa = Carbon::parse($request->tanggal_sewa);
         $tanggal_kembali = Carbon::parse($request->tanggal_kembali);
@@ -72,7 +89,7 @@ class PenyewaanController extends Controller
             'status' => 'disewa'
         ]);
 
-return redirect()->route('penyewaan.index');
+        return redirect()->route('penyewaan.index');
     }
   public function selesai(Penyewaan $penyewaan)
 {
@@ -91,6 +108,45 @@ return redirect()->route('penyewaan.index');
     ]);
 
     return redirect()->route('penyewaan.index');
+}
+   public function konfirmasi(Penyewaan $penyewaan)
+{
+    $bentrok = Penyewaan::where('mobil_id', $penyewaan->mobil_id)
+        ->where('id', '!=', $penyewaan->id)
+        ->whereIn('status', ['dikonfirmasi', 'disewa'])
+        ->where(function ($query) use ($penyewaan) {
+
+            $query->where('tanggal_sewa', '<=', $penyewaan->tanggal_kembali)
+                  ->where('tanggal_kembali', '>=', $penyewaan->tanggal_sewa);
+
+        })
+        ->exists();
+
+    if ($bentrok) {
+
+        return back()->withErrors([
+            'booking' => 'Booking tidak dapat dikonfirmasi karena mobil sudah memiliki booking lain pada tanggal tersebut.'
+        ]);
+
+    }
+
+    $penyewaan->update([
+        'status' => 'dikonfirmasi',
+    ]);
+
+    return redirect()
+        ->route('penyewaan.index')
+        ->with('success', 'Booking berhasil dikonfirmasi.');
+}
+    public function batalkan(Penyewaan $penyewaan)
+{
+    $penyewaan->update([
+        'status' => 'dibatalkan',
+    ]);
+
+    return redirect()
+        ->route('penyewaan.index')
+        ->with('success', 'Booking berhasil dibatalkan.');
 }
 
     /**

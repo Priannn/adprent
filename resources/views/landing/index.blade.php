@@ -358,47 +358,47 @@
                 <h1 class="font-bold text-[24px] md:text-[28px] text-[#003049]">Pilih Mobilnya, <br>Tentukan Perjalanannya</h1>
                 <p class="my-5 text-[15px] text-justify">Setiap perjalanan punya kebutuhan yang berbeda. Temukan <br class="hidden md:block"> pilihan kendaraan yang sesuai dengan gaya perjalanan dan <br class="hidden md:block">kebutuhan Anda.</p>
             </div>
-           @foreach ($mobil as $item) 
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-                <div class="space-y-3 p-4 shadow-xl rounded-xl">
-                    <img src="{{ asset('storage/' .$item->gambar) }}" class="w-full">
-                    <h1 class="font-bold">{{ $item->merk }} {{ $item->nama_mobil }}</h1>
-                    <h1 class="text-[#D62828] font-semibold text-xl">IDR {{ number_format($item->harga_sewa, 0, ',', '.') }}<span class="text-[10px] text-slate-500">/hari</span></h1>
-                    <div class="flex items-center space-x-2">
-                        <div class="flex">
-                            <img src="{{ asset('images/icon/bahanbakar.svg') }}" alt="" class="w-3">
-                            <h1 class="ml-2 text-sm text-slate-400">{{ $item->bahan_bakar }}</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+                    @foreach ($mobil as $item) 
+                    <div class="space-y-3 p-4 shadow-xl rounded-xl">
+                        <img src="{{ asset('storage/' .$item->gambar) }}" class="w-full">
+                        <h1 class="font-bold">{{ $item->merk }} {{ $item->nama_mobil }}</h1>
+                        <h1 class="text-[#D62828] font-semibold text-xl">IDR {{ number_format($item->harga_sewa, 0, ',', '.') }}<span class="text-[10px] text-slate-500">/hari</span></h1>
+                        <div class="flex items-center space-x-2">
+                            <div class="flex">
+                                <img src="{{ asset('images/icon/bahanbakar.svg') }}" alt="" class="w-3">
+                                <h1 class="ml-2 text-sm text-slate-400">{{ $item->bahan_bakar }}</h1>
+                            </div>
+                            <div class="flex">
+                                <img src="{{ asset('images/icon/transmisi.svg') }}" alt="" class="w-3">
+                                <h1 class="ml-2 text-sm text-slate-400">{{ $item->transmisi }}</h1>
+                            </div>
+                            <div class="flex">
+                                <img src="{{ asset('images/icon/seat.svg') }}" alt="" class="w-3">
+                                <h1 class="ml-2 text-sm text-slate-400">{{ $item->jumlah_seat }}</h1>
+                            </div>
                         </div>
-                        <div class="flex">
-                            <img src="{{ asset('images/icon/transmisi.svg') }}" alt="" class="w-3">
-                            <h1 class="ml-2 text-sm text-slate-400">{{ $item->transmisi }}</h1>
-                        </div>
-                        <div class="flex">
-                            <img src="{{ asset('images/icon/seat.svg') }}" alt="" class="w-3">
-                            <h1 class="ml-2 text-sm text-slate-400">{{ $item->jumlah_seat }}</h1>
+                        <div class="flex gap-3 mt-4">
+                            <button class="bg-[#003049] text-[9px] text-white py-2 px-3 rounded-full font-semibold flex-1"><a href="{{ route('booking.create', $item->id) }}">Book Sekarang</a></button>
+                            <button class="text-[10px] border border-[#003049] text-[#003049] py-2 px-3 rounded-full font-semibold flex-1"><a href="https://wa.me/62895800183963">Chat Admin</a></button>
                         </div>
                     </div>
-                    <div class="flex gap-3 mt-4">
-                        <button class="bg-[#003049] text-[9px] text-white py-2 px-3 rounded-full font-semibold flex-1"><a href="{{ route('booking.create', $item->id) }}">Book Sekarang</a></button>
-                        <button class="text-[10px] border border-[#003049] text-[#003049] py-2 px-3 rounded-full font-semibold flex-1"><a href="https://wa.me/62895800183963">Chat Admin</a></button>
-                    </div>
+                    @endforeach
                 </div>
-            </div>
-           @endforeach
         </section>
 
         @php
-            $testimonials = [
-                ['name' => 'Budi Pratama', 'text' => 'Sangat merekomendasikan ini untuk teman-teman. User interface-nya mudah dipahami.'],
-                ['name' => 'Rina Melati', 'text' => 'Harga terjangkau dengan kualitas premium. Pasti akan berlangganan lagi.'],
-                ['name' => 'Deni Darmawan', 'text' => 'Fiturnya lengkap dan sangat membantu produktivitas pekerjaan saya sehari-hari.'],
-                ['name' => 'Siti Aminah', 'text' => 'Awalnya ragu, tapi setelah mencoba sendiri ternyata hasilnya di luar ekspektasi. Keren!'],
-                ['name' => 'Andi Susanto', 'text' => 'Layanannya sangat memuaskan! Prosesnya cepat dan customer service sangat ramah.'],
-                ['name' => 'Fina Rahmawati', 'text' => 'Respon cepat ketika ada kendala. Sangat profesional dan terpercaya.'],
-                ['name' => 'Eka Putra', 'text' => 'Pengalaman pengguna yang luar biasa. Sangat mulus dan tanpa lag!'],
-                ['name' => 'Dewi Lestari', 'text' => 'Desainnya elegan dan modern. Klien saya sangat suka melihatnya.'],
-            ];
-        @endphp
+    $testimonials = [
+        ['name' => 'Budi Pratama', 'text' => 'Mobilnya sangat bersih, wangi, dan mesinnya prima. Perjalanan keliling Bali jadi tenang banget!'],
+        ['name' => 'Rina Melati', 'text' => 'Drivernya sangat ramah, paham jalan tikus, dan tepat waktu sekali saat jemput di bandara.'],
+        ['name' => 'Deni Darmawan', 'text' => 'Proses booking cepat, harga transparan, dan tidak ada biaya tersembunyi. Sangat recommended!'],
+        ['name' => 'Siti Aminah', 'text' => 'Awalnya ragu buat sewa mobil, tapi pelayanan Adprent Bali luar biasa. Mobilnya benar-benar terawat.'],
+        ['name' => 'Andi Susanto', 'text' => 'Layanannya sangat memuaskan! Mobil nyaman, AC dingin, dan perjalanan bisnis saya jadi sangat lancar.'],
+        ['name' => 'Fina Rahmawati', 'text' => 'Respon admin cepat banget, bahkan waktu saya butuh mobil mendadak. Sangat profesional dan terpercaya.'],
+        ['name' => 'Eka Putra', 'text' => 'Pengalaman sewa mobil terbaik di Bali. Mobil keluaran terbaru, interior bersih, tanpa kendala sedikitpun.'],
+        ['name' => 'Dewi Lestari', 'text' => 'Pelayanan jemputan tepat waktu. Mobilnya nyaman buat bawa keluarga besar liburan keliling pulau.'],
+    ];
+@endphp
         <section class="mt-20 md:mt-28 mb-28">
             <div class="flex flex-col md:flex-row  gap-8 md:gap-10">
                 <div class="w-full md:w-1/2 flex justify-center items-center"  data-aos="fade-right">
