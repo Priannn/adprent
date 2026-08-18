@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('nama_mobil');
             $table->string('merk');
             $table->string('gambar')->nullable();
+            $table->enum('bahan_bakar', ['bensin', 'diesel']);
             $table->enum('transmisi', ['matic', 'manual']);
             $table->integer('jumlah_seat');
             $table->integer('harga_sewa');

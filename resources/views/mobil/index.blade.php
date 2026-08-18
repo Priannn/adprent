@@ -14,6 +14,7 @@
             <th class="border border-slate-300 px-4 py-2">Nama Mobil</th>
             <th class="border border-slate-300 px-4 py-2">Merk Mobil</th>
             <th class="border border-slate-300 px-4 py-2">Gambar</th>
+            <th class="border border-slate-300 px-4 py-2">Bahan Bakar</th>
             <th class="border border-slate-300 px-4 py-2">Transmisi</th>
             <th class="border border-slate-300 px-4 py-2">Harga Sewa</th>
             <th class="border border-slate-300 px-4 py-2">Jumlah Seat</th>
@@ -34,6 +35,7 @@
                     class="w-24 h-16 object-cover rounded-lg"
                 >
             </td>
+            <td class="border border-slate-300 px-4 py-2">{{ $item->bahan_bakar }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $item->transmisi }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $item->harga_sewa }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $item->jumlah_seat }}</td>

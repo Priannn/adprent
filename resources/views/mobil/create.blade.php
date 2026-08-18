@@ -38,10 +38,22 @@
                     @enderror
                 </div>
                 <div class="flex flex-col">
+                    <label for="bahan_bakar" class="text-sm text-slate-700">Bahan Bakar</label>
+                  <select name="bahan_bakar" class="p-2 rounded-lg border border-blue-950 mt-2">
+                    <option value="bensin" {{ old('bahan_bakar') == 'bensin' ? 'selected' : '' }}>Matic</option>
+                    <option value="diesel" {{  old('bahan_bakar') == 'diesel' ? 'selected' : '' }}>Manual</option>
+                  </select>
+                    @error('bahan_bakar')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+                <div class="flex flex-col">
                     <label for="transmisi" class="text-sm text-slate-700">Transmisi</label>
                   <select name="transmisi" class="p-2 rounded-lg border border-blue-950 mt-2">
-                    <option value="matic">Matic</option>
-                    <option value="manual">Manual</option>
+                    <option value="matic" {{ old('transminsi') == 'matic' ? 'selected' : '' }}>Matic</option>
+                    <option value="manual" {{  old('transminsi') == 'manual' ? 'selected' : '' }}>Manual</option>
                   </select>
                     @error('transmisi')
                         <p class="text-red-500 text-sm mt-1">
