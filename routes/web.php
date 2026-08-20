@@ -68,3 +68,6 @@ Route::middleware('auth')->group(function () {
         ->name('booking.history');
 
 });
+
+Route::get('/booking/availability', [PenyewaanController::class, 'availability'])
+    ->name('booking.availability');

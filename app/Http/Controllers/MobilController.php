@@ -114,11 +114,11 @@ class MobilController extends Controller
      */
     public function destroy(Mobil $mobil)
     {
-         // Hapus gambar dari storage
-        if ($mobil->gambar) {
-            Storage::disk('public')->delete($mobil->gambar);
-        }
+        //  // Hapus gambar dari storage
+        // if ($mobil->gambar) {
+        //     Storage::disk('public')->delete($mobil->gambar);
+        // }
         $mobil->delete();
-        return redirect()->route('mobil.index');
+        return redirect()->route('mobil.index')->with('success', 'Data berhasil dihapus (softDelete');
     }
 }

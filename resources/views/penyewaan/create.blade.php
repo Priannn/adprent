@@ -91,21 +91,7 @@
                         class="p-2 rounded-lg border border-blue-950 mt-2">
                 </div>
 
-                {{-- Status --}}
-                {{-- <div class="flex flex-col">
-                    <label for="status" class="text-sm text-slate-700">
-                        Status
-                    </label>
 
-                    <select
-                        id="status"
-                        name="status"
-                        class="p-2 rounded-lg border border-blue-950 mt-2">
-
-                        <option value="">Pilih Status</option>
-                        <option value="disewa">Disewa</option>
-                    </select>
-                </div> --}}
 
             </div>
 

@@ -1,91 +1,99 @@
 @extends('layout.app')
 @section('content')
-<div class="grid grid-cols-4 p-5 gap-5">
-    <div class="bg-[#0f172b] p-5 rounded-xl">
-        <h1 class=" text-white">Total Mobil AdpRent</h1>
-        <h1 class="text-[28px] font-bold text-white">{{ $totalMobil }}</h1>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 p-5 gap-5">
+    <div class="bg-[#0f172b] p-5 rounded-xl shadow-md">
+        <h1 class="text-slate-300 text-sm">Total Mobil AdpRent</h1>
+        <h1 class="text-[28px] font-bold text-white mt-1">{{ $totalMobil }}</h1>
     </div>
-    <div class="bg-[#0f172b] p-5 rounded-xl">
-        <h1 class=" text-white">Total Pelanggan AdpRent</h1>
-        <h1 class="text-[28px] font-bold text-white">{{ $totalPelanggan }}</h1>
+    <div class="bg-[#0f172b] p-5 rounded-xl shadow-md">
+        <h1 class="text-slate-300 text-sm">Total Pelanggan AdpRent</h1>
+        <h1 class="text-[28px] font-bold text-white mt-1">{{ $totalPelanggan }}</h1>
     </div>
-    <div class="bg-[#0f172b] p-5 rounded-xl">
-        <h1 class=" text-white">Total Penyewaan AdpRent</h1>
-        <h1 class="text-[28px] font-bold text-white">{{ $totalPenyewaan }}</h1>
+    <div class="bg-[#0f172b] p-5 rounded-xl shadow-md">
+        <h1 class="text-slate-300 text-sm">Total Penyewaan AdpRent</h1>
+        <h1 class="text-[28px] font-bold text-white mt-1">{{ $totalPenyewaan }}</h1>
     </div>
-    <div class="bg-[#0f172b] p-5 rounded-xl">
-        <h1 class=" text-white">Total Pendapatan AdpRent</h1>
-        <h1 class="text-[28px] font-bold text-white">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h1>
+    <div class="bg-[#0f172b] p-5 rounded-xl shadow-md">
+        <h1 class="text-slate-300 text-sm">Total Pendapatan AdpRent</h1>
+        <h1 class="text-[28px] font-bold text-white mt-1">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h1>
     </div>
 </div>
-<div class="grid grid-cols-12 mx-5 gap-5">
-    <div class="col-span-9">
-        <div>
-            <h2 class="text-2xl font-bold text-[#162456] mb-2">Penyewa Terbaru</h2>
-            <table class="w-full border-collapse border border-slate-300">
+
+<div class="grid grid-cols-1 md:grid-cols-12 mx-5 gap-5">
+    <!-- TABEL PENYEWAA TERBARU -->
+    <div class="md:col-span-9 bg-white p-5 rounded-xl shadow-md border border-slate-200">
+        <h2 class="text-xl font-bold text-[#162456] mb-4">Penyewa Terbaru</h2>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-slate-200 text-sm">
                 <thead>
-                    <tr>
-                        <th class="border border-slate-300 px-4 py-2">No</th>
-                        <th class="border border-slate-300 px-4 py-2">Nama Penyewa</th>
-                        <th class="border border-slate-300 px-4 py-2">Mobil disewa</th>
-                        <th class="border border-slate-300 px-4 py-2">Tanggal Sewa</th>
-                        <th class="border border-slate-300 px-4 py-2"> Tanggal Kembali</th>
-                        <th class="border border-slate-300 px-4 py-2">Harga Sewa</th>
-                        <th class="border border-slate-300 px-4 py-2">Status</th>
+                    <tr class="bg-slate-100 text-slate-700">
+                        <th class="border border-slate-200 px-4 py-2.5 text-center">No</th>
+                        <th class="border border-slate-200 px-4 py-2.5 text-left">Nama Penyewa</th>
+                        <th class="border border-slate-200 px-4 py-2.5 text-left">Mobil Disewa</th>
+                        <th class="border border-slate-200 px-4 py-2.5 text-center">Tanggal Sewa</th>
+                        <th class="border border-slate-200 px-4 py-2.5 text-center">Tanggal Kembali</th>
+                        <th class="border border-slate-200 px-4 py-2.5 text-left">Harga Sewa</th>
+                        <th class="border border-slate-200 px-4 py-2.5 text-center">Status</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                     @foreach ($penyewaanTerbaru as $index => $item)
-                <tr>
-                    <td class="border border-slate-300 px-4 py-2">
-                        {{ $index+1 }}
-                    </td>
-                    <td class="border border-slate-300 px-4 py-2">
-                        {{ $item->pelanggan->nama_pelanggan }}
-                    </td>
-
-                    <td class="border border-slate-300 px-4 py-2">
-                       {{ $item->mobil->nama_mobil }}
-                    </td>
-
-                    <td class="border border-slate-300 px-4 py-2">
-                        {{ $item->tanggal_sewa }}
-                    </td>
-
-                    <td class="border border-slate-300 px-4 py-2">
-                       {{ $item->tanggal_kembali }}
-                    </td>
-                    <td class="border border-slate-300 px-4 py-2">
-                       Rp.{{ number_format($item->total_harga, 0, ',', '.') }}
-                    </td>
-                    <td class="border border-slate-300 px-4 py-2">
-                       @if ($item->status == 'disewa')
-                            <span class="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700">
-                                Disewa
-                            </span>
-                        @else
-                            <span class="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-                                Selesai
-                            </span>
-                        @endif
-                    </td>
-                </tr>
-                    @endforeach
+                    @forelse ($penyewaanTerbaru as $index => $item)
+                        <tr>
+                            <td class="border border-slate-200 px-4 py-2.5 text-center">
+                                {{ $index + 1 }}
+                            </td>
+                            <td class="border border-slate-200 px-4 py-2.5">
+                                {{ $item->pelanggan->nama_pelanggan ?? '-' }}
+                            </td>
+                            <td class="border border-slate-200 px-4 py-2.5 font-medium">
+                                {{ $item->mobil->nama_mobil ?? '-' }}
+                            </td>
+                            <td class="border border-slate-200 px-4 py-2.5 text-center">
+                                {{ $item->tanggal_sewa }}
+                            </td>
+                            <td class="border border-slate-200 px-4 py-2.5 text-center">
+                                {{ $item->tanggal_kembali }}
+                            </td>
+                            <td class="border border-slate-200 px-4 py-2.5 font-semibold text-[#D62828]">
+                                Rp {{ number_format($item->total_harga, 0, ',', '.') }}
+                            </td>
+                            <td class="border border-slate-200 px-4 py-2.5 text-center">
+                                @if($item->status === 'menunggu')
+                                    <span class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-700">Menunggu</span>
+                                @elseif($item->status === 'dikonfirmasi')
+                                    <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">Dikonfirmasi</span>
+                                @elseif($item->status === 'disewa')
+                                    <span class="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">Disewa</span>
+                                @elseif($item->status === 'selesai')
+                                    <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">Selesai</span>
+                                @else
+                                    <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">Dibatalkan</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="border border-slate-200 px-4 py-6 text-center text-gray-500">
+                                Belum ada data penyewaan terbaru.
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="col-span-3">
-        <div class="flex flex-col justify-between h-full">
-            <div class="p-5 bg-[#0f172b] text-white rounded-xl">
-                <h1>Mobil Tersedia</h1>
-                <p class="font-bold text-[28px]">{{ $mobilTersedia }}</p>
-            </div>
-            <div class="p-5 bg-[#0f172b] text-white rounded-xl">
-                <h1>Mobil Disewa</h1>
-                <p class="font-bold text-[28px]">{{ $mobilDisewa }}</p>
-            </div>
+
+    <!-- KOTAK INFORMASI KANAN -->
+    <div class="md:col-span-3 space-y-4">
+        <div class="p-5 bg-[#0f172b] text-white rounded-xl shadow-md">
+            <h1 class="text-slate-300 text-sm">Mobil Tersedia</h1>
+            <p class="font-bold text-[28px] mt-1">{{ $mobilTersedia }}</p>
+        </div>
+        <div class="p-5 bg-[#0f172b] text-white rounded-xl shadow-md">
+            <h1 class="text-slate-300 text-sm">Mobil Disewa</h1>
+            <p class="font-bold text-[28px] mt-1">{{ $mobilDisewa }}</p>
         </div>
     </div>
 </div>

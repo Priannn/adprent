@@ -134,7 +134,7 @@
             </p>
 
             <a
-                href="{{ route('home') }}#mobil"
+                href="{{ route('landing') }}#mobil"
                 class="inline-block mt-5 bg-[#003049] text-white px-5 py-3 rounded-xl font-semibold"
             >
                 Lihat Mobil

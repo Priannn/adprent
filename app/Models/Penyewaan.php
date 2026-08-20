@@ -20,6 +20,7 @@ class Penyewaan extends Model
         return $this->belongsTo(Pelanggan::class);
     }
     public function mobil(){
-        return $this->belongsTo(Mobil::class);
+        // tambahin withTrashed() biar riwayat tetap bisa membaca data mobil yang sudah "dihapus"
+        return $this->belongsTo(Mobil::class)->withTrashed(); 
     }
 }

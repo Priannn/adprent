@@ -16,34 +16,6 @@ class PelangganController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     return view('pelanggan.create');
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'nama_pelanggan'=>'required',
-    //         'nik'=>'required|unique:pelanggans,nik|numeric',
-    //         'nomor_hp'=>'required|numeric',
-    //         'alamat'=>'required'
-    //     ]);
-    //     Pelanggan::create([
-    //         'nama_pelanggan'=>$request->nama_pelanggan,
-    //         'nik'=>$request->nik,
-    //         'nomor_hp'=>$request->nomor_hp,
-    //         'alamat'=>$request->alamat,
-    //     ]);
-    //     return redirect()->route('pelanggan.index');
-    // }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)
@@ -82,9 +54,9 @@ class PelangganController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pelanggan $pelanggan)
-    {
-        $pelanggan->delete();
-        return view('pelanggan.index');
-    }
+   public function destroy(Pelanggan $pelanggan)
+{
+    $pelanggan->delete();
+    return redirect()->route('pelanggan.index')->with('success', 'Data berhasil dihapus');
+}
 }

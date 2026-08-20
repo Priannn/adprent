@@ -24,73 +24,67 @@ class PenyewaanController extends Controller
     public function create()
     {
         $pelanggan = Pelanggan::all();
-        $mobil = Mobil::where('status','tersedia')->get();
+        $mobil = Mobil::all();
         return view('penyewaan.create',compact('pelanggan','mobil'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'pelanggan_id'=>'required',
-            'mobil_id'=>'required',
-            'tanggal_sewa'=>'required|date',
-            'tanggal_kembali'=>'required|date|after:tanggal_sewa',
-            'total_harga' => 'required|numeric|min:0',
-        ]);
-        $bentrok = Penyewaan::where('mobil_id', $request->mobil_id)
+public function store(Request $request)
+{
+    // 1. Validasi input dari form (total_harga dihapus dari validasi)
+    $request->validate([
+        'pelanggan_id' => 'required',
+        'mobil_id' => 'required',
+        'tanggal_sewa' => 'required|date',
+        'tanggal_kembali' => 'required|date|after_or_equal:tanggal_sewa', // Sesuaikan jika izinkan 1 hari
+    ]);
+
+    // 2. Cek apakah mobil sudah dibooking pada tanggal yang bentrok
+    $bentrok = Penyewaan::where('mobil_id', $request->mobil_id)
         ->whereIn('status', ['menunggu', 'dikonfirmasi', 'disewa'])
         ->where(function ($query) use ($request) {
-
             $query->where('tanggal_sewa', '<=', $request->tanggal_kembali)
                   ->where('tanggal_kembali', '>=', $request->tanggal_sewa);
-
         })
         ->exists();
 
-        if ($bentrok) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'tanggal_sewa' => 'Mobil tidak tersedia pada tanggal yang kamu pilih.'
-                ]);
-        }
-        $mobil = Mobil::findorFail($request->mobil_id);
-        $tanggal_sewa = Carbon::parse($request->tanggal_sewa);
-        $tanggal_kembali = Carbon::parse($request->tanggal_kembali);
-        $jumlahHari = $tanggal_sewa->diffInDays($tanggal_kembali);
-        $jumlahHari = max($jumlahHari, 1);
-        $total_harga = $mobil->harga_sewa * $jumlahHari;
-        $cekBentrok = Penyewaan::where('mobil_id', $request->mobil_id)
-        ->where('status', 'disewa')
-        ->where(function ($query) use ($request) {
-            $query->where('tanggal_sewa', '<', $request->tanggal_kembali)
-                ->where('tanggal_kembali', '>', $request->tanggal_sewa);
-        })->exists();
-        if ($cekBentrok) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'mobil_id' => 'Mobil tersebut sedang disewa pada tanggal tersebut.'
-                ]);
-        }
-        Penyewaan::create([
-            'pelanggan_id' => $request->pelanggan_id,
-            'mobil_id' => $request->mobil_id,
-            'tanggal_sewa' => $request->tanggal_sewa,
-            'tanggal_kembali' => $request->tanggal_kembali,
-            'total_harga' => $total_harga,
-            'status' => 'disewa'
-        ]);
-
-        $mobil->update([
-            'status' => 'disewa'
-        ]);
-
-        return redirect()->route('penyewaan.index');
+    if ($bentrok) {
+        return back()
+            ->withInput()
+            ->withErrors([
+                'mobil_id' => 'Mobil tersebut sudah dipesan pada tanggal yang kamu pilih.'
+            ]);
     }
+
+    // 3. Ambil data mobil untuk tahu harga sewa per harinya
+    $mobil = Mobil::findOrFail($request->mobil_id);
+
+    // 4. Hitung durasi hari secara otomatis
+    $tanggal_sewa = Carbon::parse($request->tanggal_sewa);
+    $tanggal_kembali = Carbon::parse($request->tanggal_kembali);
+    
+    $jumlahHari = $tanggal_sewa->diffInDays($tanggal_kembali);
+    $jumlahHari = max($jumlahHari, 1); // Minimal 1 hari jika tanggal sama
+
+    // 5. Hitung total harga otomatis
+    $total_harga = $mobil->harga_sewa * $jumlahHari;
+
+    // 6. Simpan ke database
+    Penyewaan::create([
+        'pelanggan_id' => $request->pelanggan_id,
+        'mobil_id' => $request->mobil_id,
+        'tanggal_sewa' => $request->tanggal_sewa,
+        'tanggal_kembali' => $request->tanggal_kembali,
+        'total_harga' => $total_harga,
+        'status' => 'menunggu', // Atau bisa langsung 'dikonfirmasi' jika admin yang input manual dari WA
+    ]);
+
+    return redirect()
+        ->route('penyewaan.index')
+        ->with('success', 'Penyewaan manual berhasil ditambahkan.');
+}
   public function selesai(Penyewaan $penyewaan)
 {
     if ($penyewaan->tanggal_kembali > now()->toDateString()) {
@@ -149,6 +143,37 @@ class PenyewaanController extends Controller
         ->with('success', 'Booking berhasil dibatalkan.');
 }
 
+    public function availability(Request $request)
+{
+    $request->validate([
+        'tanggal_sewa' => 'required|date',
+        'tanggal_kembali' => 'required|date|after:tanggal_sewa',
+    ]);
+
+    $mobilTerbooking = Penyewaan::whereIn('status', [
+            'menunggu',
+            'dikonfirmasi',
+            'disewa'
+        ])
+        ->where(function ($query) use ($request) {
+            $query->where(
+                'tanggal_sewa',
+                '<=',
+                $request->tanggal_kembali
+            )->where(
+                'tanggal_kembali',
+                '>=',
+                $request->tanggal_sewa
+            );
+        })
+        ->pluck('mobil_id');
+
+    $mobil = Mobil::whereNotIn('id', $mobilTerbooking)
+        ->where('status', 'tersedia')
+        ->get();
+
+    return response()->json($mobil);
+}
     /**
      * Display the specified resource.
      */

@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $totalMobil = Mobil::count();
         $totalPelanggan = Pelanggan::count();
         $totalPenyewaan = Penyewaan::count();
-        $totalPendapatan = Penyewaan::sum('total_harga');
+        $totalPendapatan = Penyewaan::where('status','selesai')->sum('total_harga');
         $penyewaanTerbaru = Penyewaan::latest()->take(3)->get();
         $mobilTersedia = Mobil::where('status', 'tersedia')->count();
         $mobilDisewa = Mobil::where('status', 'disewa')->count();
